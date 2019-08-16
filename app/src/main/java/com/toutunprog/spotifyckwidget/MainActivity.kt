@@ -6,6 +6,8 @@ import android.util.Log
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.PlayerState
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,16 +49,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun connected() {
+        val playerState = mSpotifyAppRemote?.playerApi?.playerState
+        playerState?.setResultCallback { playerState ->
+            setViewFromPlayerState(playerState)
+        }
         mSpotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
-            val track = playerState.track
-            if (track != null) {
-                Log.d("MainActivity", track.name + " by " + track.artist.name)
-            }
+            setViewFromPlayerState(playerState)
         }
     }
 
     override fun onStop() {
         super.onStop()
         SpotifyAppRemote.disconnect(mSpotifyAppRemote);
+    }
+
+    private fun setViewFromPlayerState(playerState: PlayerState) {
+        val track = playerState.track
+        trackTitle.text = track.name
+        val trackArtistAlbumText = "${track.artist.name} - ${track.album.name}"
+        trackArtistAlbum.text = trackArtistAlbumText
+        mSpotifyAppRemote?.imagesApi?.getImage(track.imageUri)?.setResultCallback { bitmap ->
+            trackImageView.setImageBitmap(bitmap)
+        }
+
     }
 }
