@@ -7,7 +7,7 @@ import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.PlayerState
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.spotifyck_widget.*
 
 
 class MainActivity : AppCompatActivity() {
