@@ -19,6 +19,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        playPause_button.setOnClickListener {
+            mSpotifyAppRemote?.playerApi?.playerState?.setResultCallback { playerState ->
+                if (playerState.isPaused)
+                    mSpotifyAppRemote?.playerApi?.resume()
+                else
+                    mSpotifyAppRemote?.playerApi?.pause()
+            }
+        }
+        previous_button.setOnClickListener {
+            mSpotifyAppRemote?.playerApi?.playerState?.setResultCallback { playerState ->
+                if (playerState.playbackRestrictions.canSkipPrev && playerState.playbackPosition < 5000)
+                    mSpotifyAppRemote?.playerApi?.skipPrevious()
+                else
+                    mSpotifyAppRemote?.playerApi?.seekTo(0)
+            }
+        }
+        next_button.setOnClickListener {
+            mSpotifyAppRemote?.playerApi?.playerState?.setResultCallback { playerState ->
+                if (playerState.playbackRestrictions.canSkipNext)
+                    mSpotifyAppRemote?.playerApi?.skipNext()
+            }
+        }
     }
 
     override fun onStart() {
@@ -49,18 +71,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun connected() {
+        updateControlsState()
         val playerState = mSpotifyAppRemote?.playerApi?.playerState
         playerState?.setResultCallback { playerState ->
             setViewFromPlayerState(playerState)
         }
         mSpotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
             setViewFromPlayerState(playerState)
+            updateControlsState()
         }
     }
 
     override fun onStop() {
         super.onStop()
-        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote)
     }
 
     private fun setViewFromPlayerState(playerState: PlayerState) {
@@ -71,6 +95,18 @@ class MainActivity : AppCompatActivity() {
         mSpotifyAppRemote?.imagesApi?.getImage(track.imageUri)?.setResultCallback { bitmap ->
             trackImageView.setImageBitmap(bitmap)
         }
+    }
 
+    private fun updateControlsState() {
+        mSpotifyAppRemote?.playerApi?.playerState?.setResultCallback { playerState ->
+            val isPaused = playerState.isPaused
+            next_button.isEnabled = playerState.playbackRestrictions.canSkipNext
+
+            playPause_button.setImageDrawable(
+                if (isPaused) getDrawable(R.drawable.ic_play_arrow_white_24dp) else getDrawable(
+                    R.drawable.ic_pause_white_24dp
+                )
+            )
+        }
     }
 }
