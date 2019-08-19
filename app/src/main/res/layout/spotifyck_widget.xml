@@ -1,21 +1,99 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#09C"
     android:padding="@dimen/widget_margin">
 
-    <TextView
-        android:id="@+id/appwidget_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="#09C"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#121316"
+        android:gravity="top"
+        >
+
+        <ImageView
+            android:id="@+id/trackImageView"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:id="@+id/trackTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/trackImageView"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="#FBFCFE"
+            tools:text="Kid" />
+
+        <TextView
+            android:id="@+id/trackArtistAlbum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/trackTitle"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/trackImageView"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="#A9AAAF"
+            tools:text="Eddy de Pretto - Cure" />
+
+        <LinearLayout
+            android:id="@+id/controlArea"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/trackArtistAlbum"
+            android:layout_toRightOf="@id/trackImageView"
+            android:background="#222328"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/previous_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_skip_previous_white_24dp" />
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="30dp"
+                android:background="#2F3035" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/playPause_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_pause_white_24dp" />
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="30dp"
+                android:background="#2F3035" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_skip_next_white_24dp" />
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/greenLine"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_alignParentBottom="true"
+            android:background="#1DD45E" />
+    </RelativeLayout>
 
 </RelativeLayout>
